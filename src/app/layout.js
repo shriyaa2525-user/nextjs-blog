@@ -1,5 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Link from "next/link";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -19,10 +21,39 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} min-h-full flex flex-col antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} min-h-screen flex flex-col antialiased bg-[#fafafa]`}
       >
-        <nav>Navbar</nav>
-        {children}
+        <header className="border-b border-gray-200 bg-white sticky top-0 z-10 transition-shadow">
+          <div className="max-w-4xl mx-auto px-6 h-16 flex items-center justify-between">
+            <Link href="/" className="font-semibold text-lg tracking-tight hover:text-blue-600 transition-colors">
+              My Blog
+            </Link>
+            <nav className="flex items-center gap-6 text-sm font-medium text-gray-600">
+              <Link href="/blogs" className="hover:text-blue-600 transition-colors">
+                All Blogs
+              </Link>
+              <Link href="/profile" className="hover:text-blue-600 transition-colors">
+                Profile
+              </Link>
+              <Link href="/dashboard" className="hover:text-blue-600 transition-colors">
+                Dashboard
+              </Link>
+              <Link href="/admin" className="hover:text-blue-600 transition-colors">
+                Admin
+              </Link>
+            </nav>
+          </div>
+        </header>
+
+        <main className="flex-1 max-w-4xl mx-auto w-full px-6 py-12">
+          {children}
+        </main>
+
+        <footer className="border-t border-gray-200 py-12 mt-auto bg-gray-50">
+          <div className="max-w-4xl mx-auto px-6 text-center text-sm text-gray-500">
+            &copy; {new Date().getFullYear()} My Blog. Built with Next.js.
+          </div>
+        </footer>
       </body>
     </html>
   );
