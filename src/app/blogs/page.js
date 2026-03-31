@@ -1,37 +1,53 @@
 import Link from "next/link";
-import { posts } from "@/data/posts";
 
-export default function BlogsPage() {
-  console.log("SSG: Runs at build time");
+async function getPosts() {
+  const res = await fetch("http://localhost:3000/api/posts", {
+    cache: "no-store",
+  });
+  return res.json();
+}
 
-  return(
-    <div className="space-y-10">
-      <header className="border-b border-gray-100 pb-8">
-        <h1 className="text-4xl font-bold tracking-tight text-gray-900 mb-2">Blogs</h1>
-        <p className="text-gray-500 text-lg font-light">Explore our latest thoughts and stories.</p>
-      </header>
+export default async function BlogsPage() {
+  const posts = await getPosts();
 
-      <div className="grid gap-8">
+  return (
+    <div className="max-w-4xl mx-auto py-12">
+      <div className="flex items-center justify-between mb-12">
+        <h1 className="text-4xl font-bold text-gray-900 tracking-tight">Recent Stories</h1>
+        <Link href="/dashboard/create-post">
+          <button className="px-6 py-3 text-sm font-bold bg-black text-white hover:bg-gray-800 transition-all rounded-lg active:scale-95 shadow-sm">
+            Write a Story
+          </button>
+        </Link>
+      </div>
+
+      <div className="grid gap-6">
         {posts.map((post) => (
-          <article key={post.slug} className="group relative flex flex-col items-start p-6 rounded-2xl transition-all hover:bg-white hover:shadow-md border border-transparent hover:border-gray-100">
-            <h2 className="text-xl font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
-              <Link href={`/blogs/${post.slug}`}>
-                <span className="absolute inset-0" />
+          <article key={post.id} className="group flex flex-col bg-white border border-gray-100 p-8 rounded-2xl shadow-sm transition-all hover:shadow-lg hover:border-gray-200">
+            <Link href={`/blogs/${post.id}`} className="flex flex-col h-full">
+              <span className="text-xs font-bold uppercase tracking-widest text-blue-600 mb-3 block">Post</span>
+              <h2 className="text-2xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors mb-4 line-clamp-2">
                 {post.title}
-              </Link>
-            </h2>
-            <p className="text-gray-600 line-clamp-2 text-sm leading-relaxed">
-              {post.content.substring(0, 150)}...
-            </p>
-            <div className="mt-4 flex items-center text-sm font-medium text-blue-600">
-              Read more
-              <svg className="ml-1 w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </div>
+              </h2>
+              <div className="mt-auto flex items-center justify-between text-sm text-gray-500 font-medium">
+                <span>5 min read</span>
+                <span className="flex items-center text-blue-600 font-bold group-hover:translate-x-1 transition-transform">
+                  Read More <span className="ml-1">→</span>
+                </span>
+              </div>
+            </Link>
           </article>
         ))}
       </div>
+
+      {posts.length === 0 && (
+        <div className="text-center py-20 bg-gray-50 rounded-3xl border border-dashed border-gray-200">
+          <p className="text-xl font-medium text-gray-400">No stories found yet. Start writing today!</p>
+          <Link href="/dashboard/create-post" className="inline-block mt-4 text-blue-600 font-bold hover:underline">
+            Create your first post
+          </Link>
+        </div>
+      )}
     </div>
   );
 }
