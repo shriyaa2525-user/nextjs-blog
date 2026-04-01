@@ -1,4 +1,5 @@
 import Link from "next/link";
+import DeleteButton from "./DeleteButton";
 
 async function getPost(id) {
     const res = await fetch(`http://localhost:3000/api/posts/${id}`, {
@@ -59,6 +60,15 @@ export default async function BlogPost({ params }) {
                          {post.content}
                     </p>
                 </div>
+            </div>
+
+            <div>
+                <DeleteButton id={post.id}/>
+                <Link href={`/dashboard/edit-post/${post.id}`}>
+                    <button className="mt-4 px-6 py-3 bg-blue-600 text-white rounded-lg">
+                        Edit Post
+                    </button>
+                </Link>
             </div>
 
             <footer className="mt-20 pt-10 border-t border-gray-100 flex items-center justify-between">

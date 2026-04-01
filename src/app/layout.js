@@ -1,6 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
+import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,6 +24,8 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} min-h-screen flex flex-col antialiased bg-[#fafafa]`}
       >
+        <Toaster position="top-right" />
+
         <header className="border-b border-gray-200 bg-white sticky top-0 z-10 transition-shadow">
           <div className="max-w-4xl mx-auto px-6 h-16 flex items-center justify-between">
             <Link href="/" className="font-semibold text-lg tracking-tight hover:text-blue-600 transition-colors">
